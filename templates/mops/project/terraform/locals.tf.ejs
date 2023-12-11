@@ -1,0 +1,28 @@
+---
+to: terraform/locals.tf
+---
+locals {
+  # AWS Provider
+  aws_region  = "<%= aws_region %>"
+  aws_profile = "<%=platform_name%>-<%= environment %>"
+
+  # Account ID
+  account_id = data.aws_caller_identity.current.account_id
+
+  # Tags
+  environment = "<%= environment %>"
+  project     = "<%=platform_name%>"
+
+  # VPC Configuration
+  vpc_name = "<%= platform_name %>-<%=environment%>-vpc"
+  vpc_cidr = "<%= vpc_cidr %>"
+  azs      = slice(data.aws_availability_zones.available.names, 0, 3)
+
+  # ECR Configuration
+  ecr_repo_name     = "<%=platform_name%>-staging"
+
+  # EKS Configuration
+  eks_cluster_name                            = "<%=platform_name%>-<%= environment %>-cluster"
+  eks_cluster_version                         = "1.28"
+  eks_iam_role_prefix                         = "sa-<%=platform_name%>-<%= environment %>"
+}

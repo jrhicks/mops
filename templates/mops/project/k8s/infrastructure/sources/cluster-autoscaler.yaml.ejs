@@ -1,0 +1,12 @@
+---
+to: k8s/infrastructure/sources/cluster-autoscaler.yaml
+---
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: cluster-autoscaler
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  url: https://kubernetes.github.io/autoscaler

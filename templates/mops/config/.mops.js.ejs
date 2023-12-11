@@ -1,0 +1,18 @@
+---
+to: .mops.js
+---
+
+// make-ops config
+
+module.exports = {
+    platform_name: '<%= platform_name %>',
+    environment: '<%= environment %>',
+    aws_region: '<%= aws_region %>',
+    aws_profile: '<%= platform_name %>-<%= environment %>',
+    aws_vpc_cidr: '<%= aws_vpc_cidr %>',
+    aws_account_id: '',
+    aws_sso_start_url: '',
+    github_owner: '<%= github_owner %>',
+    github_repo_name: '<%= github_repo_name %>',    
+    github_flux_user: ''
+}

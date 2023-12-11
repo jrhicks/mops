@@ -1,0 +1,12 @@
+---
+to: k8s/infrastructure/sources/metrics-server.yaml
+---
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: metrics-server
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  url: https://kubernetes-sigs.github.io/metrics-server
