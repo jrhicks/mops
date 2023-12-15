@@ -1,0 +1,34 @@
+---
+to: snippets/<%=app_name%>/ci.yaml
+---
+      - name: Install AWS CLI
+        run: |
+          curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          ./aws/install
+
+      - name: Install Docker
+        run: |
+          apt-get update
+          apt-get install -y docker.io
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: <%=aws_region%>
+
+      - name: Get Build Number
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_RUN_NUMBER}
+
+      - name: Authenticate Docker to Amazon ECR
+        run: |
+          aws ecr get-login-password --region <%=aws_region%> | docker login --username AWS --password-stdin <%=aws_account_id%>.dkr.ecr.<%=aws_region%>.amazonaws.com
+
+      - name: Build, Tag & Push to ECR
+        run: |
+          docker build -t <%=repo_dasherized%>:${{ steps.get_version.outputs.VERSION }} .
+          docker tag <%=repo_dasherized%>:${{ steps.get_version.outputs.VERSION }} <%=aws_account_id%>.dkr.ecr.<%=aws_region%>.amazonaws.com/<%=repo_dasherized%>:${{ steps.get_version.outputs.VERSION }}
+          docker push <%=aws_account_id%>.dkr.ecr.<%=aws_region%>.amazonaws.com/<%=repo_dasherized%>:${{ steps.get_version.outputs.VERSION }}

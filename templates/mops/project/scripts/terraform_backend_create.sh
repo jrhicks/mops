@@ -13,3 +13,14 @@ aws dynamodb create-table \
     --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
     --region <%=aws_region%> \
     --profile <%=platform_name%>-<%-environment%>
+
+while true; do
+    status=$(aws dynamodb describe-table --table-name <%=platform_name%>-<%-environment%>-terraform-be --region <%=aws_region%> --profile <%=platform_name%>-<%-environment%> --query 'Table.TableStatus' --output text)
+    if [[ "$status" == "ACTIVE" ]]; then
+        echo "Table is active"
+        break
+    else
+        echo "Table is $status, waiting..."
+        sleep 3
+    fi
+done

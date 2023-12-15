@@ -1,0 +1,23 @@
+---
+to: ./k8s/apps/base/<%=app_name%>/service.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: <%=app_name%>-service
+  namespace: <%=app_name%>-ns
+  labels:
+    app: <%=app_name%>
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 3000
+    protocol: TCP
+    name: web
+  - port: 9394
+    targetPort: 9394
+    protocol: TCP
+    name: metrics
+  selector:
+    app: <%=app_name%>

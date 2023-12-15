@@ -1,0 +1,28 @@
+---
+to: ./k8s/apps/base/<%=app_name%>/deployment.yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <%=app_name%>-deployment
+  namespace: <%=app_name%>-ns
+  labels:
+    app: <%=app_name%>
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: <%=app_name%>
+  template:
+    metadata:
+      labels:
+        app: <%=app_name%>
+    spec:
+      containers:
+      - name: <%=app_name%>
+        image: <%=aws_account_id%>.dkr.ecr.<%=aws_region%>.amazonaws.com/<%=repo_dasherized%>:latest
+        ports:
+        - containerPort: 3000
+          name: web
+        - containerPort: 9394 # Default Yabeda port
+          name: metrics

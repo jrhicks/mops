@@ -15,7 +15,7 @@ locals {
 
   # VPC Configuration
   vpc_name = "<%= platform_name %>-<%=environment%>-vpc"
-  vpc_cidr = "<%= vpc_cidr %>"
+  vpc_cidr = "<%= aws_vpc_cidr %>"
   azs      = slice(data.aws_availability_zones.available.names, 0, 3)
 
   # ECR Configuration

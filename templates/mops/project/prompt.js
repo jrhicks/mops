@@ -2,8 +2,8 @@
 // https://github.com/enquirer/enquirer/tree/master/examples
 //
 
-import config from './mops.js'
+const config = require('../../../.mops.js')
 
 module.exports = {
-  params: config
+  params: ()=>config
 }

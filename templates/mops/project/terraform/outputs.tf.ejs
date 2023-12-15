@@ -14,9 +14,3 @@ output "eks_cluster_name" {
 output "eks_cluster_endpoint" {
   value = module.eks.cluster_endpoint
 }
-
-# Output ECR Repo
-output "ecr_repo_url" {
-  value = module.ecr.repository_url
-}
-

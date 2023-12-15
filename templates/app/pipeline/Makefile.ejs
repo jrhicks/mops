@@ -1,8 +1,0 @@
----
-inject: true
-to: Makefile
-before: # DANGER ZONE
----
-ecr-creds-<%=app_name%>: # Create AWS Access Keys for a user with ECR write permissions to the ECR repository for the <%=app_name%> app
-  aws iam create-access-key --user-name <%=environment%>-<%=app_name%>-ecr-user
-

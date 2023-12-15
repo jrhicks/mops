@@ -1,0 +1,7 @@
+---
+to: ./k8s/apps/namespaces/<%=app_name%>-ns.yaml
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: <%=app_name%>-ns
