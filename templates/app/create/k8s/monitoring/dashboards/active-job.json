@@ -1,5 +1,5 @@
 ---
-to: ./k8s/monitoring/configs/dashboards/<%=app_name%>-active-job.json
+to: ./k8s/monitoring/configs/dashboards/<%=app_name%>-<%=rails_env%>-active-job.json
 ---
 {
   "__inputs": [
@@ -1157,7 +1157,7 @@ to: ./k8s/monitoring/configs/dashboards/<%=app_name%>-active-job.json
     ]
   },
   "timezone": "",
-  "title": "<%=app_name%> ActiveJob",
+  "title": "<%=app_name%>-<%=rails_env%> ActiveJob",
   "uid": "yabeda-activejob",
   "version": 25,
   "weekStart": ""

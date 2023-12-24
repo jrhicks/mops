@@ -5,5 +5,6 @@ module.exports = {
   app_name: "<%=app_name %>",
   app_name_underscored: "<%=app_name_underscored %>",
   sub_domain: "<%=sub_domain %>",
-  sub_domain_underscored: "<%=sub_domain_underscored %>"
+  sub_domain_underscored: "<%=sub_domain_underscored %>",
+  rails_env: "<%=rails_env %>"
 }

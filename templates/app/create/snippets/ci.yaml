@@ -1,5 +1,5 @@
 ---
-to: snippets/<%=app_name%>/ci.yaml
+to: snippets/<%=app_name%>-<%=rails_env%>/ci.yaml
 ---
 name: CI
 

@@ -28,8 +28,16 @@ const getConfig = () => {
         config.sub_domain = subDomain;
         config.sub_domain_underscored = config.sub_domain.replace(/-/g, '_');
         r2.close();
-        console.log(config)
-        resolve(config);
+        const r3 = readline.createInterface({
+          input: process.stdin,
+          output: process.stdout
+        });
+        r3.question('Enter Rails Env (production/staging): ', (rails_env) => {
+          config.rails_env = rails_env;
+          r3.close();
+          console.log(config)
+          resolve(config);
+        });
       });
     });
   });

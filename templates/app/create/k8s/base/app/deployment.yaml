@@ -1,34 +1,36 @@
 ---
-to: ./k8s/apps/base/<%=app_name%>/deployment.yaml
+to: ./k8s/apps/base/<%=app_name%>-<%=rails_env%>/deployment.yaml
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: <%=app_name%>-deployment
-  namespace: <%=app_name%>-ns
+  name: <%=app_name%>-<%=rails_env%>-deployment
+  namespace: <%=app_name%>-<%=rails_env%>-ns
   labels:
-    app: <%=app_name%>
+    app: <%=app_name%>-<%=rails_env%>
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: <%=app_name%>
+      app: <%=app_name%>-<%=rails_env%>
   template:
     metadata:
       labels:
-        app: <%=app_name%>
+        app: <%=app_name%>-<%=rails_env%>
     spec:
       containers:
-      - name: <%=app_name%>
-        image: <%=aws_account_id%>.dkr.ecr.<%=aws_region%>.amazonaws.com/<%=repo_dasherized%>:latest # {"$imagepolicy": "flux-system:<%=app_name%>-image-policy"}
+      - name: <%=app_name%>-<%=rails_env%>
+        image: <%=aws_account_id%>.dkr.ecr.<%=aws_region%>.amazonaws.com/<%=repo_dasherized%>:latest # {"$imagepolicy": "flux-system:<%=app_name%>-<%=rails_env%>-image-policy"}
         ports:
         - containerPort: 3000
           name: web
         - containerPort: 9394 # Default Yabeda port
           name: metrics
         env: # Add this field
+        - name: RAILS_ENV
+          value: <%=rails_env%>
         - name: RAILS_MASTER_KEY
           valueFrom:
             secretKeyRef:
-              name: <%=app_name%>-rails-master-key
+              name: <%=app_name%>-<%=rails_env%>-rails-master-key
               key: RAILS_MASTER_KEY

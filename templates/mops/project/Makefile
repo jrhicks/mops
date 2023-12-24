@@ -134,7 +134,7 @@ app: cc # Create App Resources & Setup Continious Deployment
 	make tf-apply && \
 	hygen app service
 
-ecr-credentials-renew: cc # Update ECR Credentials for FluxCD image-repository scanning
+ecr-credentials: cc # Update ECR Credentials for FluxCD image-repository scanning
 	bash scripts/ecr_credentials_renew.sh
 
 flux-gh-deploy-keys: cc # Enable FluxCD image-update-automation

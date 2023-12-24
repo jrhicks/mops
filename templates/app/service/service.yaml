@@ -1,11 +1,11 @@
 ---
-to: ./k8s/apps/base/<%=app_name%>/service.yaml
+to: ./k8s/apps/base/<%=app_name%>-<%=rails_env%>/service.yaml
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: <%=app_name%>-service
-  namespace: <%=app_name%>-ns
+  name: <%=app_name%>-<%=rails_env%>-service
+  namespace: <%=app_name%>-<%=rails_env%>-ns
   annotations:
     external-dns.alpha.kubernetes.io/hostname: <%=sub_domain%>.<%=public_domain%>
     service.beta.kubernetes.io/aws-load-balancer-ssl-cert: <%=ssl_cert_arn%>
@@ -19,4 +19,4 @@ spec:
       protocol: TCP
       name: web
   selector:
-    app: <%=app_name%>
+    app: <%=app_name%>-<%=rails_env%>

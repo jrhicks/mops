@@ -1,21 +1,21 @@
 ---
-to: ./terraform/app-<%=app_name%>-s3.tf
+to: ./terraform/app-<%=app_name%>-<%=rails_env%>-s3.tf
 ---
 
 // Create S3 bucket
 resource "aws_s3_bucket" "<%=platform_name_underscored%>_<%=app_name_underscored%>_bucket" {
-  bucket = "<%=platform_name%>-<%=app_name%>-bucket"
+  bucket = "<%=platform_name%>-<%=app_name%>-<%=rails_env%>-bucket"
   acl = "private"
 }
 
 // Create IAM user
 resource "aws_iam_user" "<%=platform_name_underscored%>_<%=app_name_underscored%>_bucket_user" {
-  name = "<%=platform_name%>-<%=app_name%>-bucket-user"
+  name = "<%=platform_name%>-<%=app_name%>-<%=rails_env%>-bucket-user"
 }
 
 // Define IAM policy with required permissions
 resource "aws_iam_policy" "<%=platform_name_underscored%>_<%=app_name_underscored%>_bucket_policy" {
-  name = "<%=platform_name%>-<%=app_name%>-bucket-policy"
+  name = "<%=platform_name%>-<%=app_name%>-<%=rails_env%>-bucket-policy"
   description = "Policy for S3"
 
   policy = jsonencode({

@@ -1,10 +1,10 @@
 ---
-to: ./k8s/apps/base/<%=app_name%>/image-update-automation.yaml
+to: ./k8s/apps/base/<%=app_name%>-<%=rails_env%>/image-update-automation.yaml
 ---
 apiVersion: image.toolkit.fluxcd.io/v1beta1
 kind: ImageUpdateAutomation
 metadata:
-  name: <%=app_name%>-image-update-automation
+  name: <%=app_name%>-<%=rails_env%>-image-update-automation
   namespace: flux-system
 spec:
   interval: 1m
@@ -23,5 +23,5 @@ spec:
     push:
       branch: main
   update:
-    path: ./k8s/apps/base/<%=app_name%>/deployment.yaml
+    path: ./k8s/apps/base/<%=app_name%>-<%=rails_env%>/deployment.yaml
     strategy: Setters

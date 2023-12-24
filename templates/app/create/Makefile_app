@@ -1,0 +1,15 @@
+---
+inject: true
+to: ./Makefile
+after: APP COMMANDS
+skip_if: <%=app_name%>-gh-key
+---
+
+# <%=app_name%>
+
+<%=app_name%>-gh-key: cc # Create Access Keys for <%=app_name%> (to add to Github Secrets)
+	aws iam create-access-key --user-name <%=repo_dasherized%>-gh-user --profile <%=platform_name%>
+
+<%=app_name%>-gh-key-delete: cc # List AWS Access Keys (usefull for deleting)
+	aws iam list-access-keys --user-name <%=platform_name%>-<%=app_name%>-<%=rails_env%>-bucket-user --profile <%=platform_name%> && \
+	echo "TO DELETE: aws iam delete-access-key --user-name "<%=repo_dasherized%>-gh-user" --profile <%=platform_name%>" --access-key-id "REPLACE-ME"

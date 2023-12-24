@@ -1,5 +1,5 @@
 ---
-to: snippets/<%=app_name%>/yabeda-initializer.rb
+to: snippets/<%=app_name%>-<%=rails_env%>/yabeda-initializer.rb
 ---
 
 module Yabeda

@@ -1,5 +1,5 @@
 ---
-to: snippets/<%=app_name%>/config.ru
+to: snippets/<%=app_name%>-<%=rails_env%>/config.ru
 ---
 require_relative 'config/environment'
 use Yabeda::Prometheus::Exporter

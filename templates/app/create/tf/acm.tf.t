@@ -1,5 +1,5 @@
 ---
-to: ./terraform/app-<%=app_name%>-acm.tf
+to: ./terraform/app-<%=app_name%>-<%=rails_env%>-acm.tf
 ---
 resource "aws_acm_certificate" "<%=sub_domain_underscored%>" {
     domain_name       = "<%=sub_domain%>.${local.public_domain}"

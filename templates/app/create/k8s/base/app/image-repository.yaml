@@ -1,10 +1,10 @@
 ---
-to: ./k8s/apps/base/<%=app_name%>/image-repository.yaml
+to: ./k8s/apps/base/<%=app_name%>-<%=rails_env%>/image-repository.yaml
 ---
 apiVersion: image.toolkit.fluxcd.io/v1beta1
 kind: ImageRepository
 metadata:
-  name: <%=app_name%>-image-repository
+  name: <%=app_name%>-<%=rails_env%>-image-repository
   namespace: flux-system
 spec:
   image: <%=aws_account_id%>.dkr.ecr.<%=aws_region%>.amazonaws.com/<%=app_name%>-repo

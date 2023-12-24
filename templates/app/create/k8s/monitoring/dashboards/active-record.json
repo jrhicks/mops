@@ -1,5 +1,5 @@
 ---
-to: ./k8s/monitoring/configs/dashboards/<%=app_name%>-active-record.json
+to: ./k8s/monitoring/configs/dashboards/<%=app_name%>-<%=rails_env%>-active-record.json
 ---
 {
   "annotations": {
@@ -109,7 +109,7 @@ to: ./k8s/monitoring/configs/dashboards/<%=app_name%>-active-record.json
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "sum by(kind) (rate(activerecord_queries_total{namespace=\"<%=app_name%>-ns\"}[1m]))",
+          "expr": "sum by(kind) (rate(activerecord_queries_total{namespace=\"<%=app_name%>-<%=rails_env%>-ns\"}[1m]))",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "instant": false,
@@ -207,7 +207,7 @@ to: ./k8s/monitoring/configs/dashboards/<%=app_name%>-active-record.json
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "sum(rate(activerecord_query_duration_seconds_sum{namespace=\"<%=app_name%>-ns\"}[$__rate_interval])) / sum(rate(activerecord_query_duration_seconds_count{namespace=\"<%=app_name%>-ns\"}[$__rate_interval])) > 0",
+          "expr": "sum(rate(activerecord_query_duration_seconds_sum{namespace=\"<%=app_name%>-<%=rails_env%>-ns\"}[$__rate_interval])) / sum(rate(activerecord_query_duration_seconds_count{namespace=\"<%=app_name%>-<%=rails_env%>-ns\"}[$__rate_interval])) > 0",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "instant": false,
@@ -234,7 +234,7 @@ to: ./k8s/monitoring/configs/dashboards/<%=app_name%>-active-record.json
   },
   "timepicker": {},
   "timezone": "",
-  "title": "<%=app_name%> - Active Record",
+  "title": "<%=app_name%>-<%=rails_env%> - Active Record",
   "uid": "d6ea191a-566f-4ed7-9d91-a1e5843bd1e2",
   "version": 1,
   "weekStart": ""

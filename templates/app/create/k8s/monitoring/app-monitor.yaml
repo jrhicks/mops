@@ -1,5 +1,5 @@
 ---
-to: ./k8s/monitoring/configs/<%=app_name%>-monitor.yaml
+to: ./k8s/monitoring/configs/<%=app_name%>-<%=rails_env%>-monitor.yaml
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
@@ -7,7 +7,7 @@ metadata:
   labels:
     release: kube-prometheus-stack
     app.kubernetes.io/component: monitoring
-  name: <%=app_name%>-monitor
+  name: <%=app_name%>-<%=rails_env%>-monitor
   namespace: monitoring
 spec:
   podMetricsEndpoints:
@@ -16,7 +16,7 @@ spec:
       path: /metrics
   namespaceSelector:
     matchNames:
-      - <%=app_name%>-ns
+      - <%=app_name%>-<%=rails_env%>-ns
   selector:
     matchLabels:
-      app: <%=app_name%>
+      app: <%=app_name%>-<%=rails_env%>

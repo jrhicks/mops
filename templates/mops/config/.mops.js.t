@@ -11,7 +11,6 @@ module.exports = {
   aws_vpc_cidr: '<%= aws_vpc_cidr %>',
   aws_account_id: '',
   public_domain: '',
-  hosted_zone_id: '',
   github_owner: '<%= github_owner %>',
   github_repo_name: '<%= github_repo_name %>',
   github_flux_user: '',

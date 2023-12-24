@@ -1,11 +1,11 @@
 ---
-to: ./terraform/app-<%=app_name%>-rds-sg.tf
+to: ./terraform/app-<%=app_name%>-<%=rails_env%>-rds-sg.tf
 ---
 
 # Terraform RDS FREE Tier Instance
 
 resource "aws_security_group" "<%=platform_name_underscored%>_<%=app_name_underscored%>_rds_sg" {
-  name = "<%=platform_name%>-<%=app_name%>-rds-sg"
+  name = "<%=platform_name%>-<%=app_name%>-<%=rails_env%>-rds-sg"
   description = "Security group for RDS instance"
   vpc_id = module.vpc.vpc_id
 
@@ -32,7 +32,7 @@ resource "aws_security_group" "<%=platform_name_underscored%>_<%=app_name_unders
   }
 
   tags = {
-    Name = "<%=platform_name%>-<%=app_name%>-rds-sg"
+    Name = "<%=platform_name%>-<%=app_name%>-<%=rails_env%>-rds-sg"
   }
   depends_on = [ module.vpc ]
 }

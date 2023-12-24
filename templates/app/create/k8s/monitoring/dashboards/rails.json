@@ -1,5 +1,5 @@
 ---
-to: ./k8s/monitoring/configs/dashboards/<%=app_name%>-rails.json
+to: ./k8s/monitoring/configs/dashboards/<%=app_name%>-<%=rails_env%>-rails.json
 ---
 {
   "annotations": {
@@ -162,7 +162,7 @@ to: ./k8s/monitoring/configs/dashboards/<%=app_name%>-rails.json
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "sum by(status) (rate(rails_requests_total{namespace=\"<%=app_name%>-ns\"}[10m]))",
+          "expr": "sum by(status) (rate(rails_requests_total{namespace=\"<%=app_name%>-<%=rails_env%>-ns\"}[10m]))",
           "format": "time_series",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -292,7 +292,7 @@ to: ./k8s/monitoring/configs/dashboards/<%=app_name%>-rails.json
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "(sum(rate(rails_request_duration_seconds_sum{namespace=\"<%=app_name%>-ns\"}[10m])) > 0) / sum(rate(rails_request_duration_seconds_count{namespace=\"<%=app_name%>-ns\"}[10m]))",
+          "expr": "(sum(rate(rails_request_duration_seconds_sum{namespace=\"<%=app_name%>-<%=rails_env%>-ns\"}[10m])) > 0) / sum(rate(rails_request_duration_seconds_count{namespace=\"<%=app_name%>-<%=rails_env%>-ns\"}[10m]))",
           "format": "time_series",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -308,7 +308,7 @@ to: ./k8s/monitoring/configs/dashboards/<%=app_name%>-rails.json
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "(sum(rate(rails_db_runtime_seconds_sum{namespace=\"<%=app_name%>-ns\"}[10m])) > 0) / sum(rate(rails_db_runtime_seconds_count{namespace=\"<%=app_name%>-ns\"}[10m]))",
+          "expr": "(sum(rate(rails_db_runtime_seconds_sum{namespace=\"<%=app_name%>-<%=rails_env%>-ns\"}[10m])) > 0) / sum(rate(rails_db_runtime_seconds_count{namespace=\"<%=app_name%>-<%=rails_env%>-ns\"}[10m]))",
           "format": "time_series",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -324,7 +324,7 @@ to: ./k8s/monitoring/configs/dashboards/<%=app_name%>-rails.json
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "(sum(rate(rails_view_runtime_seconds_sum{namespace=\"<%=app_name%>-ns\"}[10m])) > 0) / sum(rate(rails_view_runtime_seconds_count{namespace=\"<%=app_name%>-ns\"}[10m]))",
+          "expr": "(sum(rate(rails_view_runtime_seconds_sum{namespace=\"<%=app_name%>-<%=rails_env%>-ns\"}[10m])) > 0) / sum(rate(rails_view_runtime_seconds_count{namespace=\"<%=app_name%>-<%=rails_env%>-ns\"}[10m]))",
           "format": "time_series",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -662,7 +662,7 @@ to: ./k8s/monitoring/configs/dashboards/<%=app_name%>-rails.json
     ]
   },
   "timezone": "",
-  "title": "<%=app_name%> Rails",
+  "title": "<%=app_name%>-<%=rails_env%> Rails",
   "uid": "yabeda-rails",
   "version": 1,
   "weekStart": ""

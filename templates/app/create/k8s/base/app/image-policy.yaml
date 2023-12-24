@@ -1,14 +1,14 @@
 ---
-to: ./k8s/apps/base/<%=app_name%>/image-policy.yaml
+to: ./k8s/apps/base/<%=app_name%>-<%=rails_env%>/image-policy.yaml
 ---
 apiVersion: image.toolkit.fluxcd.io/v1beta2
 kind: ImagePolicy
 metadata:
-  name: <%=app_name%>-image-policy
+  name: <%=app_name%>-<%=rails_env%>-image-policy
   namespace: flux-system
 spec:
   imageRepositoryRef:
-    name: <%=app_name%>-image-repository
+    name: <%=app_name%>-<%=rails_env%>-image-repository
   policy:
     numerical:
       order: asc

@@ -1,5 +1,5 @@
 ---
-to: snippets/<%=app_name%>/Gemfile
+to: snippets/<%=app_name%>-<%=rails_env%>/Gemfile
 ---
 gem 'yabeda-prometheus'
 gem 'yabeda-rails'
