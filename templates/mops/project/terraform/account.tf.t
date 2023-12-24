@@ -2,7 +2,7 @@
 to: terraform/account.tf
 ---
 variable "aws_account_id" {
-  description = "AWS Account ID for <%=platform_name%>-<%=environment%>"
+  description = "AWS Account ID for <%=platform_name%>"
   type        = string
   default     = "<%= aws_account_id %>"
 }
@@ -21,7 +21,7 @@ resource "null_resource" "account_id_check" {
   count = local.account_id_check == true ? 0 : 1
 
   provisioner "local-exec" {
-    command = "echo 'HALTING! AWS Account ID doesn't match <%= environment %>'; exit 1"
+    command = "echo 'HALTING! AWS Account ID doesn't match <%= platform_name %>'; exit 1"
   }
 }
 

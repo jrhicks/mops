@@ -4,12 +4,12 @@ to: terraform/provider.tf
 terraform {
 
   backend "s3" {
-    bucket         = "<%=platform_name%>-<%=environment%>-terraform-be"
+    bucket         = "<%=platform_name%>-terraform-be"
     key            = "state"    
     region         = "<%=aws_region%>"
-    profile        = "<%=platform_name%>-<%=environment%>"
+    profile        = "<%=platform_name%>"
     encrypt        = true
-    dynamodb_table = "<%=platform_name%>-<%=environment%>-terraform-be"
+    dynamodb_table = "<%=platform_name%>-terraform-be"
   }
 
 
@@ -29,7 +29,6 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Environment = local.environment
       Project     = local.project
       Provisoner  = "Terraform"
     }

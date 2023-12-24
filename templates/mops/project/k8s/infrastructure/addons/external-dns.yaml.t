@@ -1,0 +1,33 @@
+---
+to: ./k8s//infrastructure/addons/external-dns.yaml
+---
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: external-dns
+  namespace: flux-system
+spec:
+  chart:
+    spec:
+      chart: external-dns
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: external-dns
+        namespace: flux-system
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  values:
+    serviceAccount:
+      create: false
+      name: sa-external-dns
+    region: <%=aws_region%>
+    clusterName: eks-fluxcd-lab
+    domainFilters: ["<%=public_domain%>"]
+    policy: sync
+  interval: 2m0s
+  releaseName: external-dns
+  targetNamespace: kube-system

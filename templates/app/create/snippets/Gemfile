@@ -1,0 +1,6 @@
+---
+to: snippets/<%=app_name%>/Gemfile
+---
+gem 'yabeda-prometheus'
+gem 'yabeda-rails'
+gem "yabeda-activerecord"

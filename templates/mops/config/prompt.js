@@ -29,12 +29,6 @@ module.exports = [
   },
   {
     type: 'input',
-    name: 'environment',
-    message: "What Environment is this project for? (e.g. 'dev', 'staging', 'production')",
-    default: 'staging'
-  },
-  {
-    type: 'input',
     name: 'aws_vpc_cidr',
     message: "Input a unique CIDR bock for this VPC eg (10.220.0.0/16, or 10.221.0.0/16, 10.222.0.0/16)?",
     default: random_vipc_cidr_block()
@@ -42,7 +36,7 @@ module.exports = [
   {
     type: 'input',
     name: 'aws_region',
-    message: "What AWS Region do you want to deploy to? (e.g. 'us-east-1')",
+    message: "What AWS Region do you want to deploy to? (e.g. '<%=aws_region%>')",
     default: 'us-east-1'
   },
   {

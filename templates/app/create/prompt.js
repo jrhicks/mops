@@ -10,14 +10,27 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
+
 const getConfig = () => {
   return new Promise((resolve) => {
-    rl.question('Enter app-name (dasherized): ', (userInput) => {
-      config.app_name = userInput;
-      config.repo_dasherized = `${config.environment}-${config.app_name}-repo`
+    rl.question('Enter app-name (dasherized): ', (appName) => {
+      config.app_name = appName;
+      config.app_name_underscored = config.app_name.replace(/-/g, '_')
+      config.platform_name_underscored = config.platform_name.replace(/-/g, '_')
+      config.repo_dasherized = `${config.app_name}-repo`
       config.repo_underscored = config.repo_dasherized.replace(/-/g, '_')
       rl.close();
-      resolve(config);
+      const r2 = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+      });
+      r2.question('Enter app-name (www): ', (subDomain) => {
+        config.sub_domain = subDomain;
+        config.sub_domain_underscored = config.sub_domain.replace(/-/g, '_');
+        r2.close();
+        console.log(config)
+        resolve(config);
+      });
     });
   });
 };

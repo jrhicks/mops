@@ -23,15 +23,13 @@ spec:
   values:
     serviceMonitor:
       enabled: true
-      annotations:
-        key: value # Replace with your desired annotations
       interval: "10s" # Scrape interval
       namespace: "monitoring"
       path: "/metrics"
       selector:
         release: "kube-prometheus-stack"
     autoDiscovery:
-      clusterName: <%=platform_name%>-<%= environment %>-cluster
+      clusterName: <%=platform_name%>-cluster
     awsRegion: <%=aws_region%>
     cloudProvider: aws
     rbac:

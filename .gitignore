@@ -64,3 +64,4 @@ plan.out
 
 ## Ignore Private Configs
 .mops.js
+.mops_app.js

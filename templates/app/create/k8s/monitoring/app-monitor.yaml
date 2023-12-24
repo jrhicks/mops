@@ -1,22 +1,22 @@
 ---
-to: ./monitoring/configs/<%=app_name%>-monitor.yaml
+to: ./k8s/monitoring/configs/<%=app_name%>-monitor.yaml
 ---
 apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
+kind: PodMonitor
 metadata:
   labels:
-    app: <%=app_name%>
     release: kube-prometheus-stack
+    app.kubernetes.io/component: monitoring
   name: <%=app_name%>-monitor
-  namespace: "monitoring"
+  namespace: monitoring
 spec:
-  endpoints:
-    - interval: 30s
-      port: 9394
+  podMetricsEndpoints:
+    - port: metrics
+      interval: 30s
       path: /metrics
   namespaceSelector:
     matchNames:
       - <%=app_name%>-ns
   selector:
     matchLabels:
-      app: <%=app_name%>-deployment
+      app: <%=app_name%>

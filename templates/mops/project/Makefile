@@ -2,7 +2,7 @@
 to: ./Makefile
 ---
 
-export AWS_PROFILE=<%= platform_name%>-<%= environment %>
+export AWS_PROFILE=<%=platform_name%>
 
 help: # Print this help message
 	@echo "Usage: \n"
@@ -14,15 +14,22 @@ cc: # Print Mops Copyright Info
 aws-cli: cc # Install AWS CLI
 	brew install awscli
 
+tf-cli: cc # Install Terraform CLI
+	brew install terraform && \
+	brew install terraform-docs
+
 hygen-cli: cc # Install Hygen - Code Generation Tool
 	brew tap jondot/tap && \
 	brew install hygen
 
 kube-cli: cc # Install Kubernetes CLI
-	brew install kubernetes-cli
+	brew install kubectl
 
 flux-cli: cc # Install FluxCD CLI
 	brew install fluxcd/tap/flux
+
+nuke-cli: cc # Install aws-nuke CLI
+	brew install aws-nuke
 
 config: cc # Generate Inial Configuration
 	hygen mops config
@@ -30,15 +37,14 @@ config: cc # Generate Inial Configuration
 mops: cc # Generate Mops Project Code
 	hygen mops project
 
-profile: cc # Configure AWS SSO Profile <%= platform_name%>-<%= environment %>
-	aws configure sso --profile <%= platform_name%>-<%= environment %> \
+profile: cc # Configure AWS SSO Profile <%=platform_name%>
+	aws configure sso --profile <%=platform_name%> \
 
 profile-edit: cc # Edit AWS SSO Profiles
 	code ~/.aws/config
 
-login: cc # Authenticate CLIs using AWS Profile <%= platform_name%>-<%= environment %> and sets AWS_PROFILE ENV var to <%= platform_name%>-<%= environment %>
-	aws sso login --profile <%= platform_name%>-<%= environment %>
-	bash scripts/aws_profile_set.sh
+login: cc # Authenticate CLIs using AWS Profile <%=platform_name%> and sets AWS_PROFILE ENV var to <%=platform_name%>
+	aws sso login --profile <%=platform_name%>
 
 cluster: cc # Setup & Terraform K8s Cluster, Configure GitOps, Load Balancer, Autoscaler, and Monioring
 	make tf-backend && \
@@ -72,8 +78,13 @@ tf-apply: cc # Validate and Apply Terraform Scripts
 	terraform apply && \
 	cd ..
 
+tf-doc: cc # Document Terrform Resources
+	cd terraform && \
+	terraform-docs markdown . > README.md && \
+	cd ..
+
 kubectl-config: cc # Configure Kubectl to point to EKS Cluster
-	aws eks --region <%=aws_region%> update-kubeconfig --name <%=platform_name%>-<%= environment %>-cluster
+	aws eks --region <%=aws_region%> update-kubeconfig --name <%=platform_name%>-cluster
 
 fsync: cc # Trigger Flux to Reconcile 
 	make kubectl-config && \
@@ -113,11 +124,29 @@ dashboard: cc # Connect and open Grafana Dashboard
 	kubectl -n monitoring port-forward svc/kube-prometheus-stack-grafana  3008:80 & \
 	open http://localhost:3008
 
-app: cc # Create continious deployment pipeline for an app.
+nameservers: cc # List name servers for Route53 hosted zone
+	aws route53 get-hosted-zone --id $$(cd terraform; terraform output -raw hosted_zone_id) --profile <%=platform_name%>
+
+app: cc # Create App Resources & Setup Continious Deployment
 	make kubectl-config && \
 	hygen app create && \
 	make tf-modules && \
-	make tf-apply
+	make tf-apply && \
+	hygen app service
+
+ecr-credentials-renew: cc # Update ECR Credentials for FluxCD image-repository scanning
+	bash scripts/ecr_credentials_renew.sh
+
+flux-gh-deploy-keys: cc # Enable FluxCD image-update-automation
+	echo "Add the key to Github Deploy Keys: " && \
+	flux create secret git -n flux-system flux-system --url=ssh://git@github.com/<%=github_owner%>/<%=github_repo_name%>
+
+rds-password: cc # Generate random username and password for RDS
+	@echo "username: $$(cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z' | fold -w 16 | head -n 1)" && \
+	echo "password: $$(cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z1-9' | fold -w 32 | head -n 1)"
+
+# APP COMMANDS
+
 
 # DANGER ZONE
 
@@ -130,6 +159,10 @@ tf-destroy: cc # Destroy all the AWS resources
 	terraform destroy && \
 	cd ..
 
+tf-force-unlock: cc # Force Unlock Terraform State
+	read -p "LOCK ID: " LOCK_ID && \
+	cd terraform;  terraform force-unlock -force $$LOCK_ID; cd ..
+
 tf-backend-destroy: cc # Destroy AWS Resources for Terraform Backend (S3, DynamoDB)
 	bash scripts/terraform_backend_destroy.sh
 
@@ -139,6 +172,7 @@ project-destroy: cc # Destroy the scaffolded project
 	rm -rf scripts && \
 	rm -rf cluster && \
 	rm -rf k8s && \
+	rm nuke-config.yml && \
 	hygen mops end
 
 push: cc # Push to Git
@@ -153,3 +187,6 @@ go: cc # !! Push Repo & Trigger Gitop Reconcilation
 	make push && \
 	make fsync && \
 	make fwatch
+
+aws-nuke: cc # !! Nuke AWS Account
+	aws-nuke -c nuke-config.yml --profile <%=platform_name%> --no-dry-run

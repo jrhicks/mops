@@ -8,8 +8,6 @@ metadata:
   name: apps-sources
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: infra-configs
   interval: 10m0s
   retryInterval: 1m0s
   timeout: 5m0s
@@ -45,6 +43,7 @@ spec:
   dependsOn:
     - name: apps-sources
     - name: apps-namespaces
+    - name: infra-addons
   interval: 10m0s
   retryInterval: 1m0s
   timeout: 5m0s

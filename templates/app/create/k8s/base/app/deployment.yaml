@@ -20,9 +20,15 @@ spec:
     spec:
       containers:
       - name: <%=app_name%>
-        image: <%=aws_account_id%>.dkr.ecr.<%=aws_region%>.amazonaws.com/<%=repo_dasherized%>:latest
+        image: <%=aws_account_id%>.dkr.ecr.<%=aws_region%>.amazonaws.com/<%=repo_dasherized%>:latest # {"$imagepolicy": "flux-system:<%=app_name%>-image-policy"}
         ports:
         - containerPort: 3000
           name: web
         - containerPort: 9394 # Default Yabeda port
           name: metrics
+        env: # Add this field
+        - name: RAILS_MASTER_KEY
+          valueFrom:
+            secretKeyRef:
+              name: <%=app_name%>-rails-master-key
+              key: RAILS_MASTER_KEY

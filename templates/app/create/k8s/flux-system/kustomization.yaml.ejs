@@ -1,17 +1,18 @@
----
+# NOT NEEDED
+<!-- ---
 inject: true
 append: true
 to: ./cluster/flux-system/kustomization.yaml
 docs: # https://fluxcd.io/flux/installation/configuration/workload-identity/#aws-iam-roles-for-service-accounts
----
+--- -->
 patches:
-  - patch: |
-      apiVersion: v1
-      kind: ServiceAccount
-      metadata:
-        name: controller
-        annotations:
-          eks.amazonaws.com/role-arn: arn:aws:iam::<%=aws_account_id%>:role/<%=repo_dasherized%>-read-role
+- patch: |
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+name: controller
+annotations:
+eks.amazonaws.com/role-arn: arn:aws:iam::<%=aws_account_id%>:role/<%=repo_dasherized%>-read-role
     target:
-      kind: ServiceAccount
-      name: "(source-controller|image-reflector-controller)"
+    kind: ServiceAccount
+    name: "(source-controller|image-reflector-controller)"

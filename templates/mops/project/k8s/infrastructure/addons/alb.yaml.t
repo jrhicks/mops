@@ -1,6 +1,3 @@
----
-to: k8s/infrastructure/addons/alb.yaml
----
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -26,8 +23,8 @@ spec:
     serviceAccount:
       create: false
       name: sa-aws-load-balancer-controller
-    region: <%= aws_region %>
-    clusterName: <%=platform_name%>-<%= environment %>-cluster
+    region: us-east-1
+    clusterName: ppd-prod-cluster
   interval: 2m0s
   releaseName: aws-load-balancer-controller
   targetNamespace: kube-system

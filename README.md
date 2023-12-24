@@ -13,8 +13,7 @@ Make recipes for platform generation and operation.
 ## Opinions
 
 * 2-Factor authentication for Terraform
-* 1 AWS account per platform environment
-* 1 Github repo per platform environment
+* 1 Repo per AWS Member Account
 * App repo(s) separate from platform repo
 
 ## CLI Dependencies
