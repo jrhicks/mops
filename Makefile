@@ -9,5 +9,5 @@ hygen-cli: cc # Install AWS CLI
 	brew tap jondot/tap && \
 	brew install hygen
 
-init: cc # Initialize Project
-	hygen project init
+hygen-config: cc # Initialize Project
+	hygen project config
