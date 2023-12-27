@@ -10,6 +10,18 @@ help: # Print this help message
 cc: # Print Mops Copyright Info
 	@echo 'MOPS (c) MIT 2023' # Makefile hack to make all recipes look un-built
 
+hygen-config: cc # Initialize Project 
+	hygen project config
+
+hygen-tf: cc # Scaffold Project's Terraform IaC 
+	hygen project terraform
+
+hygen-k8s: cc # Scaffold Project's K8s IaC
+	hygen project k8s
+
+hygen-app: cc # Scaffold an App's IaC
+	hygen app all
+
 aws-cli: cc # Install AWS CLI
 	brew install awscli
 
@@ -28,9 +40,6 @@ aws-nameservers: cc # List name servers for Route53 hosted zone (after Terraform
 tf-cli: cc # Install Terraform CLI
 	brew install terraform
 
-tf-iac: cc # Scaffold Project's Terraform Code 
-	hygen project terraform
-
 tf-init: cc # Create AWS Resources for Terraform Backend and initialize client
 	bash scripts/terraform_backend_create.sh && \
 	cd terraform && \
@@ -46,9 +55,6 @@ k8s-cli: cc # Install Kubernetes CLI
 
 k8s-login: cc # Configure Kubectl to point to EKS Cluster
 	aws eks --region <%=aws_region%> update-kubeconfig --name <%=platform_name%>-cluster
-
-k8s-iac: cc # Scaffold Project's K8s Code 
-	hygen project k8s
 
 flux-cli: cc # Install FluxCD CLI
 	brew install fluxcd/tap/flux
@@ -73,10 +79,7 @@ flux-sync: cc # Trigger Flux to Reconcile
 flux-watch: cc # Watch Flux reconcile
 	make k8s-login && \
     bash scripts/flux_watch.sh && \
-	say "Flux Ready"
-
-app-iac: cc # Scaffold an App
-	hygen app all
+	say "Flux Ready
 
 app-rds-password: cc # Generate random username and password for RDS
 	@echo "username: $$(cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z' | fold -w 16 | head -n 1)" && \
