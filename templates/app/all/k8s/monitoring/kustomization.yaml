@@ -1,0 +1,9 @@
+---
+inject: true
+to: ./k8s/monitoring/configs/kustomization.yaml
+after: files.
+skip_if: dashboards/<%=app_name%>-<%=rails_env%>-active-job.json
+---
+      - dashboards/<%=app_name%>-<%=rails_env%>-active-job.json
+      - dashboards/<%=app_name%>-<%=rails_env%>-active-record.json
+      - dashboards/<%=app_name%>-<%=rails_env%>-rails.json

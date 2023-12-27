@@ -1,0 +1,22 @@
+---
+inject: true
+to: ./Makefile
+after: APP COMMANDS
+skip_if: <%=app_name%>-<%=rails_env%>-s3-key
+---
+
+# <%=app_name%>-<%=rails_env%>
+
+<%=app_name%>-<%=rails_env%>-s3-key: cc # Create Access Keys for <%=app_name%>-<%=rails_env%> (to add to Github Secrets)
+	aws iam create-access-key --user-name <%=platform_name%>-<%=app_name%>-<%=rails_env%>-bucket-user --profile <%=platform_name%>
+
+<%=app_name%>-<%=rails_env%>-s3-key-delete: cc # List AWS Access Keys (usefull for deleting)
+	aws iam list-access-keys --user-name <%=platform_name%>-<%=app_name%>-<%=rails_env%>-bucket-user --profile <%=platform_name%> && \
+	echo "TO DELETE: aws iam delete-access-key --user-name "<%=platform_name%>-<%=app_name%>-<%=rails_env%>-bucket-user" --profile <%=platform_name%>" --access-key-id "REPLACE-ME"
+
+<%=app_name%>-<%=rails_env%>-sync: cc # Trigger FLuxCD to Reconcile <%=app_name%>-<%=rails_env%>
+	flux reconcile kustomization <%=app_name%>-<%=rails_env%>-kustomization
+
+<%=app_name%>-<%=rails_env%>-rails-master-key-secret: cc # Deploy K8s SECRET rails_master_key for <%=app_name%>
+	read -p "rails_master_key (<%=rails_env%>): " rails_master_key && \
+	kubectl create secret generic <%=app_name%>-<%=rails_env%>-rails-master-key --from-literal=RAILS_MASTER_KEY=$$rails_master_key --namespace=<%=namespace%>

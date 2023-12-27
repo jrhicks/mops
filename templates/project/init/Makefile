@@ -1,4 +1,7 @@
-export AWS_PROFILE=ppd-compute
+---
+to: ./Makefile
+---
+export AWS_PROFILE=<%=platform_name%>
 
 help: # Print this help message
 	@echo "Usage: \n"
@@ -10,17 +13,17 @@ cc: # Print Mops Copyright Info
 aws-cli: cc # Install AWS CLI
 	brew install awscli
 
-aws-profile: cc # Configure AWS SSO Profile ppd-compute
-	aws configure sso --profile ppd-compute \
+aws-profile: cc # Configure AWS SSO Profile <%=platform_name%>
+	aws configure sso --profile <%=platform_name%> \
 
 aws-profile-edit: cc # Edit AWS SSO Profiles
 	code ~/.aws/config
 
-aws-login: cc # Authenticate CLIs using AWS Profile ppd-compute and sets AWS_PROFILE ENV var to ppd-compute
-	aws sso login --profile ppd-compute
+aws-login: cc # Authenticate CLIs using AWS Profile <%=platform_name%> and sets AWS_PROFILE ENV var to <%=platform_name%>
+	aws sso login --profile <%=platform_name%>
 
 aws-nameservers: cc # List name servers for Route53 hosted zone (after Terraform)
-	aws route53 get-hosted-zone --id $$(cd terraform; terraform output -raw hosted_zone_id) --profile ppd-compute
+	aws route53 get-hosted-zone --id $$(cd terraform; terraform output -raw hosted_zone_id) --profile <%=platform_name%>
 
 tf-cli: cc # Install Terraform CLI
 	brew install terraform
@@ -42,7 +45,7 @@ k8s-cli: cc # Install Kubernetes CLI
 	brew install kubectl
 
 k8s-login: cc # Configure Kubectl to point to EKS Cluster
-	aws eks --region us-east-1 update-kubeconfig --name ppd-compute-cluster
+	aws eks --region <%=aws_region%> update-kubeconfig --name <%=platform_name%>-cluster
 
 k8s-iac: cc # Scaffold Project's K8s Code 
 	hygen project k8s
@@ -60,7 +63,7 @@ flux-ecr-credentials: cc # Update ECR Credentials for FluxCD image-repository sc
 
 flux-gh-deploy-keys: cc # Enable FluxCD image-update-automation
 	echo "Add the key to Github Deploy Keys: " && \
-	flux create secret git -n flux-system flux-system --url=ssh://git@github.com/PinpointDining/ppd-compute
+	flux create secret git -n flux-system flux-system --url=ssh://git@github.com/<%=github_owner%>/<%=github_repo_name%>
 
 flux-sync: cc # Trigger Flux to Reconcile 
 	make k8s-login && \
@@ -80,31 +83,6 @@ app-rds-password: cc # Generate random username and password for RDS
 	echo "password: $$(cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z1-9' | fold -w 32 | head -n 1)"
 
 # APP COMMANDS
-# booking-production
-
-booking-production-s3-key: cc # Create Access Keys for booking-production (to add to Github Secrets)
-	aws iam create-access-key --user-name ppd-compute-booking-production-bucket-user --profile ppd-compute
-
-booking-production-s3-key-delete: cc # List AWS Access Keys (usefull for deleting)
-	aws iam list-access-keys --user-name ppd-compute-booking-production-bucket-user --profile ppd-compute && \
-	echo "TO DELETE: aws iam delete-access-key --user-name "ppd-compute-booking-production-bucket-user" --profile ppd-compute" --access-key-id "REPLACE-ME"
-
-booking-production-sync: cc # Trigger FLuxCD to Reconcile booking-production
-	flux reconcile kustomization booking-production-kustomization
-
-booking-production-rails-master-key-secret: cc # Deploy K8s SECRET rails_master_key for booking
-	read -p "rails_master_key (production): " rails_master_key && \
-	kubectl create secret generic booking-production-rails-master-key --from-literal=RAILS_MASTER_KEY=$$rails_master_key --namespace=booking-production-ns
-
-# booking
-
-booking-gh-key: cc # Create Access Keys for booking (to add to Github Secrets)
-	aws iam create-access-key --user-name booking-repo-gh-user --profile ppd-compute
-
-booking-gh-key-delete: cc # List AWS Access Keys (usefull for deleting)
-	aws iam list-access-keys --user-name ppd-compute-booking-production-bucket-user --profile ppd-compute && \
-	echo "TO DELETE: aws iam delete-access-key --user-name "booking-repo-gh-user" --profile ppd-compute" --access-key-id "REPLACE-ME"
-
 
 
 # DANGER ZONE
@@ -133,18 +111,12 @@ project-destroy: cc # Destroy the scaffolded project
 	rm nuke-config.yml \
 	hygen project end
 
-push: cc # Push to Git
+go: cc # !! Push Repo & Trigger Gitop Reconcilation
 	git add . && \
 	git commit -m "Commit all" && \
-	git push
-
-redo: cc # !! Overwrite project
-	HYGEN_OVERWRITE=1 hygen mops project
-
-go: cc # !! Push Repo & Trigger Gitop Reconcilation
-	make push && \
-	make fsync && \
-	make fwatch
+	git push && \
+	make flux-sync && \
+	make flux-watch
 
 # ULTRA DANGER ZONE
 
@@ -152,4 +124,4 @@ nuke-cli: cc # Install aws-nuke CLI
 	brew install aws-nuke
 
 nuke-aws-account: cc # !! Nuke AWS Account
-	aws-nuke -c nuke-config.yml --profile ppd-compute --no-dry-run
+	aws-nuke -c nuke-config.yml --profile <%=platform_name%> --no-dry-run

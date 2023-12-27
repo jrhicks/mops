@@ -1,0 +1,90 @@
+---
+to: cluster/apps.yaml
+skip_if: /k8s/apps/deployments
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: apps-deployments
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: apps-namespaces
+  interval: 1m0s
+  retryInterval: 1m0s
+  timeout: 5m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./k8s/apps/deployments
+  prune: true
+  wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: apps-image-automations
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  retryInterval: 1m0s
+  timeout: 5m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./k8s/apps/image-automations
+  prune: true
+  wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: apps-ingresses
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: apps-deployments
+  interval: 1m0s
+  retryInterval: 1m0s
+  timeout: 5m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./k8s/apps/ingresses
+  prune: true
+  wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: apps-monitors
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: apps-deployments
+  interval: 1m0s
+  retryInterval: 1m0s
+  timeout: 5m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./k8s/apps/monitors
+  prune: true
+  wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: apps-namespaces
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  retryInterval: 1m0s
+  timeout: 5m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./k8s/apps/namespaces
+  prune: true
+  wait: true
+

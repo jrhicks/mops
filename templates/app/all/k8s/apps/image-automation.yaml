@@ -1,0 +1,50 @@
+---
+to: ./k8s/apps/image-automations/<%=app_name%>-<%=rails_env%>.yaml
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImageRepository
+metadata:
+  name: <%=app_name%>-<%=rails_env%>-image-repository
+  namespace: flux-system
+spec:
+  image: <%=aws_account_id%>.dkr.ecr.<%=aws_region%>.amazonaws.com/<%=repo_dasherized%>
+  interval: 1m
+  secretRef:
+    name: ecr-credentials
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: <%=app_name%>-<%=rails_env%>-image-policy
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: <%=app_name%>-<%=rails_env%>-image-repository
+  policy:
+    numerical:
+      order: asc
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImageUpdateAutomation
+metadata:
+  name: <%=app_name%>-<%=rails_env%>-image-update-automation
+  namespace: flux-system
+spec:
+  interval: 1m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  git:
+    checkout:
+      ref:
+        branch: main
+    commit:
+      author:
+        name: <%=github_flux_user%>
+        email: <%=github_flux_email%>
+      messageTemplate: "{{range .Updated.Images}}{{println .}}{{end}}"
+    push:
+      branch: main
+  update:
+    path: ./k8s/apps/deployments/<%=app_name%>-<%=rails_env%>.yaml
+    strategy: Setters

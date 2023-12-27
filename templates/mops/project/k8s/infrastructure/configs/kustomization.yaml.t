@@ -1,6 +1,0 @@
----
-to: k8s/infrastructure/configs/kustomization.yaml
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-resources: []

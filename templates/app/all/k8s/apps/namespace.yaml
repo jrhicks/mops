@@ -1,0 +1,7 @@
+---
+to: ./k8s/apps/namespaces/<%=app_name%>-<%=rails_env%>.yaml
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: <%=namespace%>
