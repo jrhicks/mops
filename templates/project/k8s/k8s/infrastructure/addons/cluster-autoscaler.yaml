@@ -32,7 +32,7 @@ spec:
         release: kube-prometheus-stack
     autoDiscovery:
       clusterName: <%=platfrom_name%>-cluster
-    awsRegion: us-east-1
+    awsRegion: <%=aws_region%>
     cloudProvider: aws
     rbac:
       serviceAccount:
