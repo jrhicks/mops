@@ -5,7 +5,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: monitoring
 resources:
-  - autoscaler-monitor.yaml
   - alb-monitor.yaml
   - flux-monitor.yaml
 configMapGenerator:

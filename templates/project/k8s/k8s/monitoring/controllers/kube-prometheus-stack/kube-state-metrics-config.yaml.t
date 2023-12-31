@@ -5,9 +5,9 @@ kube-state-metrics:
   # For kube-prometheus-stacks that are already installed and configured with
   # custom collectors, commenting out the collectors and extraArgs below will
   # retain any existing kube-state-metrics configuration.
-  collectors: [ ]
+  # collectors: [ ] # Uncomment to disable all collectors
   extraArgs:
-    - --custom-resource-state-only=true
+    - --custom-resource-state-only=fase
   rbac:
     extraRules:
       - apiGroups:

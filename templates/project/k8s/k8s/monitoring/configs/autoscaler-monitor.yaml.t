@@ -19,4 +19,4 @@ spec:
       - kube-system      
   selector:
     matchLabels:
-      app.kubernetes.io/name: aws-load-balancer-controller
+      app.kubernetes.io/name: aws-cluster-autoscaler

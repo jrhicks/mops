@@ -11,6 +11,7 @@ spec:
   chart:
     spec:
       chart: cluster-autoscaler
+      version: 9.34.1
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
@@ -24,19 +25,20 @@ spec:
     serviceMonitor:
       enabled: true
       interval: "10s" # Scrape interval
-      namespace: "monitoring"
-      path: "/metrics"
+      namespace: monitoring
+      path: /metrics
+      port: http
       selector:
-        release: "kube-prometheus-stack"
+        release: kube-prometheus-stack
     autoDiscovery:
-      clusterName: <%=platform_name%>-cluster
-    awsRegion: <%=aws_region%>
+      clusterName: <%=platfrom_name%>-cluster
+    awsRegion: us-east-1
     cloudProvider: aws
     rbac:
       serviceAccount:
         create: false
         name: sa-cluster-autoscaler
     replicaCount: 2
-  interval: 2m0s
+  interval: 10m0s
   releaseName: cluster-autoscaler
   targetNamespace: kube-system

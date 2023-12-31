@@ -28,6 +28,7 @@ to: k8s/monitoring/configs/dashboards/autoscaler.json
   "panels": [
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
       "fieldConfig": {
@@ -84,22 +85,29 @@ to: k8s/monitoring/configs/dashboards/autoscaler.json
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "10.1.0",
+      "pluginVersion": "10.2.2",
       "targets": [
         {
           "datasource": {
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "sum(cluster_autoscaler_nodes_count)\n",
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "sum(cluster_autoscaler_nodes_count{state=\"ready\"})",
           "format": "time_series",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
           "intervalFactor": 2,
+          "range": true,
           "refId": "A",
-          "step": 600
+          "step": 600,
+          "useBackend": false
         }
       ],
-      "title": "Total nodes",
+      "title": "Ready nodes",
       "type": "stat"
     },
     {
@@ -129,16 +137,16 @@ to: k8s/monitoring/configs/dashboards/autoscaler.json
             "mode": "absolute",
             "steps": [
               {
-                "color": "rgba(50, 172, 45, 0.97)",
+                "color": "red",
                 "value": null
               },
               {
-                "color": "rgba(237, 129, 40, 0.89)",
-                "value": 100
+                "color": "yellow",
+                "value": 94.9996
               },
               {
-                "color": "rgba(245, 54, 54, 0.9)",
-                "value": 95
+                "color": "green",
+                "value": 99.9999
               }
             ]
           },
@@ -156,6 +164,8 @@ to: k8s/monitoring/configs/dashboards/autoscaler.json
       "links": [],
       "maxDataPoints": 100,
       "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
         "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
@@ -167,7 +177,7 @@ to: k8s/monitoring/configs/dashboards/autoscaler.json
         "showThresholdLabels": false,
         "showThresholdMarkers": false
       },
-      "pluginVersion": "10.1.0",
+      "pluginVersion": "10.2.2",
       "targets": [
         {
           "datasource": {
@@ -185,6 +195,7 @@ to: k8s/monitoring/configs/dashboards/autoscaler.json
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
       "fieldConfig": {
@@ -247,18 +258,21 @@ to: k8s/monitoring/configs/dashboards/autoscaler.json
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "10.1.0",
+      "pluginVersion": "10.2.2",
       "targets": [
         {
           "datasource": {
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "sum(cluster_autoscaler_cluster_safe_to_autoscale)",
+          "editorMode": "code",
+          "expr": "max(cluster_autoscaler_cluster_safe_to_autoscale)",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "",
+          "legendFormat": "{{label_name}}",
+          "range": true,
           "refId": "A",
           "step": 600
         }
@@ -318,9 +332,10 @@ to: k8s/monitoring/configs/dashboards/autoscaler.json
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "10.1.0",
+      "pluginVersion": "10.2.2",
       "targets": [
         {
           "datasource": {
@@ -395,9 +410,10 @@ to: k8s/monitoring/configs/dashboards/autoscaler.json
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "10.1.0",
+      "pluginVersion": "10.2.2",
       "targets": [
         {
           "datasource": {
@@ -472,9 +488,10 @@ to: k8s/monitoring/configs/dashboards/autoscaler.json
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "10.1.0",
+      "pluginVersion": "10.2.2",
       "targets": [
         {
           "datasource": {
@@ -532,7 +549,7 @@ to: k8s/monitoring/configs/dashboards/autoscaler.json
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "10.1.0",
+      "pluginVersion": "10.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -640,7 +657,7 @@ to: k8s/monitoring/configs/dashboards/autoscaler.json
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "10.1.0",
+      "pluginVersion": "10.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -758,7 +775,7 @@ to: k8s/monitoring/configs/dashboards/autoscaler.json
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "10.1.0",
+      "pluginVersion": "10.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -916,9 +933,10 @@ to: k8s/monitoring/configs/dashboards/autoscaler.json
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "10.1.0",
+      "pluginVersion": "10.2.2",
       "targets": [
         {
           "datasource": {
@@ -938,7 +956,6 @@ to: k8s/monitoring/configs/dashboards/autoscaler.json
   ],
   "refresh": "",
   "schemaVersion": 38,
-  "style": "dark",
   "tags": [
     "prometheus"
   ],
