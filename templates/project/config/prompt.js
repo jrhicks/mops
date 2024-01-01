@@ -37,7 +37,7 @@ module.exports = [
     type: 'input',
     name: 'aws_region',
     message: "What AWS Region do you want to deploy to? (e.g. '<%=aws_region%>')",
-    default: 'us-east-1'
+    default: '<%=aws_region%>'
   },
   {
     type: 'input',

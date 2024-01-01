@@ -9,7 +9,7 @@ metadata:
   labels:
     app: <%=app_name%>-<%=rails_env%>
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: <%=app_name%>-<%=rails_env%>
@@ -20,13 +20,13 @@ spec:
     spec:
       containers:
       - name: <%=app_name%>-<%=rails_env%>
-        image: <%=aws_account_id%>.dkr.ecr.<%=aws_region%>.amazonaws.com/<%=repo_dasherized%>:latest # {"$imagepolicy": "flux-system:<%=app_name%>-<%=rails_env%>-image-policy"}
+        image: <%=aws_account_id%>.dkr.ecr.<%=aws_region%>.amazonaws.com/<%=app_name%>-repo:latest # {"$imagepolicy": "flux-system:<%=app_name%>-<%=rails_env%>-image-policy"}
         ports:
         - containerPort: 3000
           name: web
-        - containerPort: 9394 # Default Yabeda port
+        - containerPort: 9394
           name: metrics
-        env: # Add this field
+        env:
         - name: RAILS_ENV
           value: <%=rails_env%>
         - name: RAILS_MASTER_KEY
@@ -34,3 +34,62 @@ spec:
             secretKeyRef:
               name: <%=app_name%>-<%=rails_env%>-rails-master-key
               key: RAILS_MASTER_KEY
+        livenessProbe:
+          httpGet:
+            path: /up
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /up
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10              
+        resources:
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+          requests:
+            cpu: "0.5"
+            memory: "512Mi"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <%=app_name%>-<%=rails_env%>-worker-deployment
+  namespace: <%=namespace%>
+  labels:
+    app: <%=app_name%>-<%=rails_env%>-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: <%=app_name%>-<%=rails_env%>-worker
+  template:
+    metadata:
+      labels:
+        app: <%=app_name%>-<%=rails_env%>-worker
+    spec:
+      containers:
+      - name: <%=app_name%>-<%=rails_env%>
+        image: <%=aws_account_id%>.dkr.ecr.<%=aws_region%>.amazonaws.com/<%=app_name%>-repo:latest # {"$imagepolicy": "flux-system:<%=app_name%>-<%=rails_env%>-image-policy"}
+        command: ["./bin/rake", "solid_queue:start"]
+        ports:
+        - containerPort: 9394
+          name: metrics        
+        env:
+        - name: RAILS_ENV
+          value: <%=rails_env%>
+        - name: RAILS_MASTER_KEY
+          valueFrom:
+            secretKeyRef:
+              name: <%=app_name%>-<%=rails_env%>-rails-master-key
+              key: RAILS_MASTER_KEY
+        resources:
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+          requests:
+            cpu: "0.5"
+            memory: "512Mi"
